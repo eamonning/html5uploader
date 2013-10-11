@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>html5uploder文件上传</title>
+<script src="js/jquery-1.8.2.min.js"></script>
+<style>
+#html5uploder-box{width:200px;border:1px solid #CCC;text-align:center;margin:10px;padding:10px;border-radius:5px;-webkit-border-radius:5px;-moz-border-radius:5px;}
+#html5uploder-status{border:1px solid #F90;margin:10px;padding:10px;border-radius:5px;-webkit-border-radius:5px;-moz-border-radius:5px;}
+#html5uploder-debug{border:1px solid #CCC;margin:10px;padding:10px;width:600px;height:200px;color:#333;overflow:scroll;}
+</style>
+</head>
+<body>
+
+<div id="html5uploder-box">请将文件拖放至该方框</div>
+<div id="html5uploder-status">等待操作</div>
+<div id="html5uploder-debug"></div>
+
+<script src="js/html5uploader.min.js"></script>
+<script language="javascript">
+var html5;
+$(function(){
+           
+    html5=$('#html5uploder-box').html5uploder({
+			//调试盒子id
+			debug:'html5uploder-debug',
+			//地址
+			url:'./submit.php',
+            //设置需要POST的键值对
+            post:{	a:'b',	c:'d'	},
+			//form名称
+			inputNmae:'html5uploader',
+			//单个文件大小限制
+			singleFilesizeLimit:1024*1024*1024,
+			//单个文件超限回调函数
+			singleFilesizeLimitFunc:function(filelist){
+				alert('单个文件大小超过限制');
+			},
+			//总大小限制
+			totalFilesizeLimit:1024*1024*1024,
+			//总大小限制超限回调函数
+			totalFilesizeLimitFunc:function(filelist){
+				alert('总文件大小超过限制');
+			},
+			//不支持html5调用的函数
+			html5UnsupportedFunc:function(obj){
+				$(obj).html('HTML5 Not Supported!');
+			},
+			//drop over handler
+			dropOverFunc:function(obj){
+				obj.css('background','#CCC');
+			},
+			//all upload complete
+			allUploadedCompleteFunc:function(succeedSize,errorSize){
+				$('#html5uploder-status').html('所有文件上传完成！成功：'+succeedSize+' 失败：'+errorSize );
+			},
+			//uploading
+			uploadingFunc:function(singleLoaded,singleTotal,allLoaded,allTotal){
+				$('#html5uploder-status').html('正在上传('+singleLoaded+'/'+singleTotal +')...');
+			},
+			//onloadstart
+			onloadstartFunc:function(list,allLoaded,allTotal){
+				//开始上传
+			},
+			//onload
+			onloadFunc:function(response,list,allLoaded,allTotal){
+				$('#html5uploder-status').html('上传完成 "'+list.name+'"');
+			},
+			//onerror
+			onerrorFunc:function(response,list,allLoaded,allTotal){
+				//上传错误
+			}
+    });
+    
+});
+</script>
+</body>
+</html>
